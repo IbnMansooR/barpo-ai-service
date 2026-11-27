@@ -27,8 +27,8 @@ if (!SECRET || SECRET.length < 16) {
   console.error('AI_SERVICE_SECRET (min 16 chars) is required');
   process.exit(1);
 }
-if (!process.env.CLAUDE_CODE_OAUTH_TOKEN) {
-  console.error('CLAUDE_CODE_OAUTH_TOKEN is required (create it with `claude setup-token`)');
+if (!process.env.CLAUDE_CODE_OAUTH_TOKEN && !process.env.ANTHROPIC_API_KEY) {
+  console.error('ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN (from `claude setup-token`) is required');
   process.exit(1);
 }
 

@@ -41,9 +41,13 @@ export function extractJsonObject(text) {
   return JSON.parse(text.slice(start, end + 1));
 }
 
-/** Child process gets only what the CLI needs: the Claude token is never mixed with anything else of ours. */
+/**
+ * Child process gets only what the CLI needs: the Claude credential is never mixed with anything else of ours.
+ * An API key (pay per use, no weekly limit) wins over the subscription token when both are set.
+ */
 export function buildClaudeEnv(env) {
-  const allowed = ['PATH', 'HOME', 'LANG', 'LC_ALL', 'TMPDIR', 'CLAUDE_CODE_OAUTH_TOKEN'];
+  const credential = env.ANTHROPIC_API_KEY ? 'ANTHROPIC_API_KEY' : 'CLAUDE_CODE_OAUTH_TOKEN';
+  const allowed = ['PATH', 'HOME', 'LANG', 'LC_ALL', 'TMPDIR', credential];
   const clean = Object.fromEntries(allowed.filter((key) => env[key] !== undefined).map((key) => [key, env[key]]));
   return {
     ...clean,
